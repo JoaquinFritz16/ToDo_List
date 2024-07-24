@@ -1,20 +1,36 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
-
-  const handleInputChange = (e) => {
-    setNewTask(e.target.value);
+  const [texto, setTexto] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [categoriasPred, setCategoriasPred] = useState("");
+  const categorias = ["Estudio", "Hogar", "Salud", "Ocio", "Otro"]
+  const handleTextoChange = (e) => {
+    setTexto(e.target.value);
   };
+
+  const handleCategoriaChange = (e) => {
+    setCategoria(e.target.value);
+  };
+  const handleCategoriaPredChange= (e) => {
+    setCategoria(e.target.value)
+  }
 
   const handleAddTask = (e) => {
     e.preventDefault();
-    if (newTask.trim() !== "") {
-      setTasks([...tasks, newTask]);
-      setNewTask("");
-    }
+    const newObject = {
+      text: texto,
+      categoria: categoria,
+    };
+    setTasks([...tasks, newObject]);
+    setTexto("");
+    setCategoria("");
+  };
+
+  const handleDelete = (index) => {
+    const nuevaLista = tasks.filter((item, i) => i !== index);
+    setTasks(nuevaLista);
   };
 
   const handleSubmit = (e) => {
@@ -29,17 +45,36 @@ function ToDoList() {
         </center>
       </div>
       <div className="form">
-        <form onSubmit={handleSubmit}>
-          <input 
-            type="text" 
-            value={newTask} 
-            onChange={handleInputChange} 
-          />
-          <button onClick={handleAddTask}>Agregar</button>
-        </form>
+        <center>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Texto"
+              value={texto}
+              onChange={handleTextoChange}
+            />
+            <input
+              type="text"
+              placeholder="Categoria"
+              value={categoria}
+              onChange={handleCategoriaChange}
+            />
+            <br />
+            <label>Categoria:</label>
+            <select value={categoriasPred} onChange={handleCategoriaPredChange}>
+              {categorias.map((categoria, index)=> (
+                <option key={index} value={categoria}>{categoria}</option>
+              ))}
+            </select>
+            <button onClick={handleAddTask}>Agregar</button>
+          </form>
+        </center>
         <ul>
           {tasks.map((task, index) => (
-            <li key={index}>{task}</li>
+            <li key={index}>
+              Nombre: {task.text}, Categoria: {task.categoria}
+              <button onClick={() => handleDelete(index)}>Eliminar</button>
+            </li>
           ))}
         </ul>
       </div>
