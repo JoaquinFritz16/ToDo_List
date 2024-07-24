@@ -1,18 +1,20 @@
 import React from "react";
 import { useState } from "react";
 
-function ToDo_list() {
+function ToDoList() {
   const [tasks, setTasks] = useState([]);
-  const [Newtask, setNewtask] = useState("");
+  const [newTask, setNewTask] = useState("");
 
   const handleInputChange = (e) => {
-    setNewtask(e.target.value);
+    setNewTask(e.target.value);
   };
 
   const handleAddTask = (e) => {
     e.preventDefault();
-    setTasks([...tasks, Newtask]);
-    setNewtask("");
+    if (newTask.trim() !== "") {
+      setTasks([...tasks, newTask]);
+      setNewTask("");
+    }
   };
 
   const handleSubmit = (e) => {
@@ -30,14 +32,19 @@ function ToDo_list() {
         <form onSubmit={handleSubmit}>
           <input 
             type="text" 
-            value={Newtask} 
-            onChange={handleInputChange} />
+            value={newTask} 
+            onChange={handleInputChange} 
+          />
           <button onClick={handleAddTask}>Agregar</button>
-          <p>{tasks.join(", ")}</p>
         </form>
+        <ul>
+          {tasks.map((task, index) => (
+            <li key={index}>{task}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 }
 
-export default ToDo_list;
+export default ToDoList;
